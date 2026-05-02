@@ -45,7 +45,25 @@ function DashboardLayout({ title, children }) {
             <Link style={styles.link} to="/customer-report">
               Customer Report
             </Link>
+
+            <Link style={styles.link} to="/parts-management">
+              Parts Management
+            </Link>
+
+            <Link style={styles.link} to="/purchase-invoices">
+              Purchase Invoices
+            </Link>
+
+            <Link style={styles.link} to="/vendor-management">
+              Vendor Management
+            </Link>
           </>
+        )}
+
+        {role === "Admin" && (
+          <Link style={styles.link} to="/staff-management">
+            Staff Management
+          </Link>
         )}
       </nav>
       </aside>
