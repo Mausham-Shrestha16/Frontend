@@ -93,7 +93,7 @@ function VendorManagement() {
 
         <div style={styles.card}>
           <h3 style={styles.cardTitle}>Vendors ({vendors.length})</h3>
-          {!role === "Admin" && message && <p style={styles.msg}>{message}</p>}
+          {role !== "Admin" && message && <p style={styles.msg}>{message}</p>}
           {vendors.length === 0 ? (
             <p style={{ color: "#6b7280" }}>No vendors found.</p>
           ) : (
