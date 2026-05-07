@@ -11,6 +11,9 @@ import StaffManagement from "./pages/StaffManagement.jsx";
 import PartsManagement from "./pages/PartsManagement.jsx";
 import PurchaseInvoices from "./pages/PurchaseInvoices.jsx";
 import VendorManagement from "./pages/VendorManagement.jsx";
+import SalesInvoices from "./pages/SalesInvoices.jsx";
+import FinancialReports from "./pages/FinancialReports.jsx";
+import Alerts from "./pages/Alerts.jsx";
 
 function App() {
   return (
@@ -31,6 +34,10 @@ function App() {
         <Route path="/parts-management" element={<PartsManagement />} />
         <Route path="/purchase-invoices" element={<PurchaseInvoices />} />
         <Route path="/vendor-management" element={<VendorManagement />} />
+
+        <Route path="/sales-invoices" element={<SalesInvoices />} />
+        <Route path="/financial-reports" element={<FinancialReports />} />
+        <Route path="/alerts" element={<Alerts />} />
       </Routes>
     </BrowserRouter>
   );
