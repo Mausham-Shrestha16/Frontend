@@ -69,111 +69,38 @@ function RegisterCustomer() {
   return (
     <div style={styles.page}>
       <div style={styles.card}>
-        <h1 style={styles.title}>Customer Registration</h1>
-        <p style={styles.subtitle}>Create your account with vehicle details</p>
+        <div style={styles.header}>
+          <h1 style={styles.title}>Customer Registration</h1>
+          <p style={styles.subtitle}>Create a customer account with vehicle details</p>
+        </div>
 
         {error && <div style={styles.error}>{error}</div>}
 
-        <form onSubmit={handleRegister} style={styles.form}>
-          <h3 style={styles.sectionTitle}>Personal Details</h3>
+        <form onSubmit={handleRegister}>
+          <h3 style={styles.sectionTitle}>Personal Information</h3>
 
-          <input
-            name="fullName"
-            placeholder="Full Name"
-            value={formData.fullName}
-            onChange={handleChange}
-            style={styles.input}
-            required
-          />
+          <div style={styles.grid}>
+            <input name="fullName" placeholder="Full Name" value={formData.fullName} onChange={handleChange} style={styles.input} required />
+            <input name="email" type="email" placeholder="Email" value={formData.email} onChange={handleChange} style={styles.input} required />
+            <input name="phoneNumber" placeholder="Phone Number" value={formData.phoneNumber} onChange={handleChange} style={styles.input} required />
+            <input name="password" type="password" placeholder="Password" value={formData.password} onChange={handleChange} style={styles.input} required />
+          </div>
 
-          <input
-            name="email"
-            type="email"
-            placeholder="Email"
-            value={formData.email}
-            onChange={handleChange}
-            style={styles.input}
-            required
-          />
+          <input name="address" placeholder="Address" value={formData.address} onChange={handleChange} style={styles.fullInput} required />
 
-          <input
-            name="phoneNumber"
-            placeholder="Phone Number"
-            value={formData.phoneNumber}
-            onChange={handleChange}
-            style={styles.input}
-            required
-          />
+          <h3 style={styles.sectionTitle}>Vehicle Information</h3>
 
-          <input
-            name="password"
-            type="password"
-            placeholder="Password"
-            value={formData.password}
-            onChange={handleChange}
-            style={styles.input}
-            required
-          />
+          <div style={styles.grid}>
+            <input name="vehicleNumber" placeholder="Vehicle Number" value={formData.vehicleNumber} onChange={handleChange} style={styles.input} required />
+            <input name="vehicleType" placeholder="Vehicle Type" value={formData.vehicleType} onChange={handleChange} style={styles.input} required />
+            <input name="brand" placeholder="Brand" value={formData.brand} onChange={handleChange} style={styles.input} required />
+            <input name="model" placeholder="Model" value={formData.model} onChange={handleChange} style={styles.input} required />
+          </div>
 
-          <input
-            name="address"
-            placeholder="Address"
-            value={formData.address}
-            onChange={handleChange}
-            style={styles.input}
-            required
-          />
-
-          <h3 style={styles.sectionTitle}>Vehicle Details</h3>
-
-          <input
-            name="vehicleNumber"
-            placeholder="Vehicle Number e.g. BA 12 PA 1234"
-            value={formData.vehicleNumber}
-            onChange={handleChange}
-            style={styles.input}
-            required
-          />
-
-          <input
-            name="vehicleType"
-            placeholder="Vehicle Type e.g. Car, Bike"
-            value={formData.vehicleType}
-            onChange={handleChange}
-            style={styles.input}
-            required
-          />
-
-          <input
-            name="brand"
-            placeholder="Brand e.g. Toyota"
-            value={formData.brand}
-            onChange={handleChange}
-            style={styles.input}
-            required
-          />
-
-          <input
-            name="model"
-            placeholder="Model e.g. Corolla"
-            value={formData.model}
-            onChange={handleChange}
-            style={styles.input}
-            required
-          />
-
-          <input
-            name="year"
-            type="number"
-            placeholder="Year e.g. 2020"
-            value={formData.year}
-            onChange={handleChange}
-            style={styles.input}
-            required
-          />
+          <input name="year" type="number" placeholder="Year" value={formData.year} onChange={handleChange} style={styles.fullInput} required />
 
           <button type="submit" style={styles.button} disabled={loading}>
-            {loading ? "Registering..." : "Register"}
+            {loading ? "Registering..." : "Register Customer"}
           </button>
         </form>
 
@@ -193,58 +120,66 @@ const styles = {
     minHeight: "100vh",
     background: "#f3f4f6",
     display: "flex",
-    alignItems: "center",
     justifyContent: "center",
-    fontFamily: "Arial, sans-serif",
+    alignItems: "center",
     padding: "30px",
+    fontFamily: "Arial, sans-serif",
   },
   card: {
-    width: "500px",
+    width: "760px",
     background: "#ffffff",
-    padding: "30px",
-    borderRadius: "12px",
-    boxShadow: "0 8px 24px rgba(0,0,0,0.12)",
+    padding: "32px",
+    borderRadius: "14px",
+    boxShadow: "0 10px 30px rgba(0,0,0,0.12)",
+  },
+  header: {
+    textAlign: "center",
+    marginBottom: "24px",
   },
   title: {
     margin: 0,
-    fontSize: "26px",
     color: "#111827",
-    textAlign: "center",
   },
   subtitle: {
-    marginTop: "8px",
-    marginBottom: "20px",
     color: "#6b7280",
-    textAlign: "center",
-  },
-  form: {
-    display: "flex",
-    flexDirection: "column",
-    gap: "12px",
+    marginTop: "8px",
   },
   sectionTitle: {
-    margin: "10px 0 0",
-    color: "#1f2937",
-    fontSize: "17px",
+    color: "#111827",
+    marginTop: "22px",
+    marginBottom: "12px",
+  },
+  grid: {
+    display: "grid",
+    gridTemplateColumns: "repeat(2, 1fr)",
+    gap: "14px",
   },
   input: {
-    width: "100%",
-    padding: "11px",
+    padding: "12px",
     border: "1px solid #d1d5db",
     borderRadius: "8px",
     fontSize: "14px",
+  },
+  fullInput: {
+    width: "100%",
+    padding: "12px",
+    border: "1px solid #d1d5db",
+    borderRadius: "8px",
+    fontSize: "14px",
+    marginTop: "14px",
     boxSizing: "border-box",
   },
   button: {
-    marginTop: "10px",
-    padding: "12px",
-    background: "#1f2937",
+    width: "100%",
+    marginTop: "24px",
+    padding: "13px",
+    background: "#2563eb",
     color: "#ffffff",
     border: "none",
     borderRadius: "8px",
-    cursor: "pointer",
     fontSize: "15px",
     fontWeight: "bold",
+    cursor: "pointer",
   },
   error: {
     background: "#fee2e2",
@@ -252,17 +187,16 @@ const styles = {
     padding: "10px",
     borderRadius: "8px",
     marginBottom: "16px",
-    fontSize: "14px",
   },
   footerText: {
-    marginTop: "18px",
     textAlign: "center",
+    marginTop: "18px",
     color: "#4b5563",
   },
   link: {
     color: "#2563eb",
-    cursor: "pointer",
     fontWeight: "bold",
+    cursor: "pointer",
   },
 };
 
