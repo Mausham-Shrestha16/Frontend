@@ -24,6 +24,15 @@ function CustomerDetails() {
     }
   };
 
+  const formatDate = (dateValue) => {
+    if (!dateValue) return "N/A";
+    return new Date(dateValue).toLocaleDateString();
+  };
+
+  const formatMoney = (value) => {
+    return `Rs. ${Number(value || 0).toLocaleString()}`;
+  };
+
   if (error) {
     return (
       <DashboardLayout title="Customer Details">
@@ -49,29 +58,16 @@ function CustomerDetails() {
       <div style={styles.grid}>
         <div style={styles.card}>
           <h2 style={styles.sectionTitle}>Customer Information</h2>
-          <p>
-            <strong>Name:</strong> {customer.fullName}
-          </p>
-          <p>
-            <strong>Email:</strong> {customer.email}
-          </p>
-          <p>
-            <strong>Phone:</strong> {customer.phoneNumber}
-          </p>
-          <p>
-            <strong>Address:</strong> {customer.address}
-          </p>
+          <p><strong>Name:</strong> {customer.fullName}</p>
+          <p><strong>Email:</strong> {customer.email}</p>
+          <p><strong>Phone:</strong> {customer.phoneNumber}</p>
+          <p><strong>Address:</strong> {customer.address}</p>
         </div>
 
         <div style={styles.card}>
           <h2 style={styles.sectionTitle}>Summary</h2>
-          <p>
-            <strong>Total Vehicles:</strong> {customer.vehicles?.length || 0}
-          </p>
-          <p>
-            <strong>Total Purchase Records:</strong>{" "}
-            {customer.purchaseHistory?.length || 0}
-          </p>
+          <p><strong>Total Vehicles:</strong> {customer.vehicles?.length || 0}</p>
+          <p><strong>Total Purchase Records:</strong> {customer.purchaseHistory?.length || 0}</p>
         </div>
       </div>
 
@@ -100,7 +96,7 @@ function CustomerDetails() {
                     <td style={styles.td}>{vehicle.vehicleType}</td>
                     <td style={styles.td}>{vehicle.brand}</td>
                     <td style={styles.td}>{vehicle.model}</td>
-                    <td style={styles.td}>{vehicle.year}</td>
+                    <td style={styles.td}>{vehicle.year || "N/A"}</td>
                   </tr>
                 ))}
               </tbody>
@@ -113,35 +109,68 @@ function CustomerDetails() {
         <h2 style={styles.sectionTitle}>Purchase History</h2>
 
         {!customer.purchaseHistory || customer.purchaseHistory.length === 0 ? (
-          <p style={styles.empty}>
-            No purchase history available yet. This section will show invoice
-            history after the sales invoice module is integrated.
-          </p>
+          <p style={styles.empty}>No purchase history available yet.</p>
         ) : (
-          <div style={styles.tableWrapper}>
-            <table style={styles.table}>
-              <thead>
-                <tr>
-                  <th style={styles.th}>Invoice No.</th>
-                  <th style={styles.th}>Date</th>
-                  <th style={styles.th}>Total</th>
-                  <th style={styles.th}>Paid</th>
-                  <th style={styles.th}>Credit</th>
-                </tr>
-              </thead>
+          <div style={styles.invoiceList}>
+            {customer.purchaseHistory.map((invoice) => (
+              <div key={invoice.invoiceId} style={styles.invoiceCard}>
+                <div style={styles.invoiceHeader}>
+                  <div>
+                    <h3 style={styles.invoiceTitle}>{invoice.invoiceNumber}</h3>
+                    <p style={styles.invoiceDate}>{formatDate(invoice.invoiceDate)}</p>
+                  </div>
 
-              <tbody>
-                {customer.purchaseHistory.map((invoice) => (
-                  <tr key={invoice.invoiceId}>
-                    <td style={styles.td}>{invoice.invoiceNumber}</td>
-                    <td style={styles.td}>{invoice.invoiceDate}</td>
-                    <td style={styles.td}>{invoice.totalAmount}</td>
-                    <td style={styles.td}>{invoice.paidAmount}</td>
-                    <td style={styles.td}>{invoice.creditAmount}</td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
+                  <div style={styles.invoiceAmountBox}>
+                    <p style={styles.amountLabel}>Total</p>
+                    <p style={styles.amountValue}>{formatMoney(invoice.totalAmount)}</p>
+                  </div>
+                </div>
+
+                <div style={styles.paymentGrid}>
+                  <div style={styles.paymentItem}>
+                    <span style={styles.paymentLabel}>Paid</span>
+                    <strong>{formatMoney(invoice.paidAmount)}</strong>
+                  </div>
+
+                  <div style={styles.paymentItem}>
+                    <span style={styles.paymentLabel}>Credit</span>
+                    <strong style={invoice.creditAmount > 0 ? styles.creditText : styles.paidText}>
+                      {formatMoney(invoice.creditAmount)}
+                    </strong>
+                  </div>
+                </div>
+
+                <h4 style={styles.itemTitle}>Purchased Items</h4>
+
+                {!invoice.items || invoice.items.length === 0 ? (
+                  <p style={styles.empty}>No item details found for this invoice.</p>
+                ) : (
+                  <div style={styles.tableWrapper}>
+                    <table style={styles.table}>
+                      <thead>
+                        <tr>
+                          <th style={styles.th}>Part Name</th>
+                          <th style={styles.th}>Quantity</th>
+                          <th style={styles.th}>Unit Price</th>
+                          <th style={styles.th}>Subtotal</th>
+                        </tr>
+                      </thead>
+
+                      <tbody>
+                        {invoice.items.map((item, index) => (
+                          <tr key={`${invoice.invoiceId}-${index}`}>
+                            <td style={styles.td}>{item.partName}</td>
+                            <td style={styles.td}>{item.quantity}</td>
+                            <td style={styles.td}>{formatMoney(item.unitPrice)}</td>
+                            <td style={styles.td}>{formatMoney(item.subTotal)}</td>
+                          </tr>
+                        ))}
+                      </tbody>
+                    </table>
+                  </div>
+                )}
+              </div>
+            ))}
           </div>
         )}
       </div>
@@ -186,6 +215,78 @@ const styles = {
     padding: "12px",
     borderBottom: "1px solid #e5e7eb",
     fontSize: "14px",
+  },
+  invoiceList: {
+    display: "flex",
+    flexDirection: "column",
+    gap: "18px",
+  },
+  invoiceCard: {
+    border: "1px solid #e5e7eb",
+    borderRadius: "12px",
+    padding: "18px",
+    background: "#f9fafb",
+  },
+  invoiceHeader: {
+    display: "flex",
+    justifyContent: "space-between",
+    gap: "16px",
+    flexWrap: "wrap",
+    marginBottom: "14px",
+  },
+  invoiceTitle: {
+    margin: 0,
+    color: "#111827",
+  },
+  invoiceDate: {
+    margin: "6px 0 0",
+    color: "#6b7280",
+  },
+  invoiceAmountBox: {
+    background: "white",
+    border: "1px solid #e5e7eb",
+    borderRadius: "10px",
+    padding: "10px 14px",
+    minWidth: "150px",
+  },
+  amountLabel: {
+    margin: 0,
+    color: "#6b7280",
+    fontSize: "13px",
+  },
+  amountValue: {
+    margin: "4px 0 0",
+    fontWeight: "bold",
+    color: "#2563eb",
+    fontSize: "20px",
+  },
+  paymentGrid: {
+    display: "grid",
+    gridTemplateColumns: "repeat(auto-fit, minmax(160px, 1fr))",
+    gap: "12px",
+    marginBottom: "14px",
+  },
+  paymentItem: {
+    background: "white",
+    border: "1px solid #e5e7eb",
+    borderRadius: "10px",
+    padding: "12px",
+  },
+  paymentLabel: {
+    display: "block",
+    color: "#6b7280",
+    fontSize: "13px",
+    marginBottom: "4px",
+  },
+  itemTitle: {
+    marginBottom: "10px",
+    color: "#374151",
+  },
+  creditText: {
+    color: "#dc2626",
+  },
+  paidText: {
+    color: "#16a34a",
   },
   empty: {
     color: "#6b7280",
