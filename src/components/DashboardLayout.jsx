@@ -45,7 +45,49 @@ function DashboardLayout({ title, children }) {
             <Link style={styles.link} to="/customer-report">
               Customer Report
             </Link>
+
+            <Link style={styles.link} to="/parts-management">
+              Parts Management
+            </Link>
+
+            <Link style={styles.link} to="/purchase-invoices">
+              Purchase Invoices
+            </Link>
+
+            <Link style={styles.link} to="/vendor-management">
+              Vendor Management
+            </Link>
+
+            <Link style={styles.link} to="/sales-invoices">
+              Sales Invoices
+            </Link>
+
+            <Link style={styles.link} to="/financial-reports">
+              Financial Reports
+            </Link>
+
+            <Link style={styles.link} to="/alerts">
+              Alerts & Reminders
+            </Link>
+
+            <Link style={styles.link} to="/appointments">
+              Appointments
+            </Link>
+
+            <Link style={styles.link} to="/part-requests">
+              Part Requests
+            </Link>
+
+            <Link style={styles.link} to="/reviews">
+              Reviews
+            </Link>
           </>
+        )}
+
+        {role === "Admin" && (
+          <Link style={styles.link} to="/staff-management">
+            Staff Management
+          </Link>
         )}
       </nav>
       </aside>
